@@ -35,12 +35,16 @@ app.component('product-display', {
           class="button" 
           :class="{ disabledButton: !inStock }" 
           :disabled="!inStock" 
-          v-on:click="addToCart">
+          @click="addToCart">
           Add to Cart
         </button>
 
       </div>
     </div>
+
+    <review-list :reviews="reviews" v-if="reviews.length"></review-list>
+    <review-form @review-payload="displayReview"></review-form>
+
   </div>`,
   data() {
     return {
@@ -51,16 +55,23 @@ app.component('product-display', {
         variants: [
           { id: 2234, color: 'green', image: './assets/images/socks_green.jpg', quantity: 50 },
           { id: 2235, color: 'blue', image: './assets/images/socks_blue.jpg', quantity: 0 },
-        ]
+        ],
+        reviews:[]
     }
   },
   methods: {
       addToCart() {
-          this.$emit('add-to-cart', this.variants[this.selectedVariant].id)
+          this.$emit('add-to-cart', this.variants[this.selectedVariant].id);
+          this.variants[this.selectedVariant].quantity--;
       },
       updateVariant(index) {
           this.selectedVariant = index
-      }
+      },
+      displayReview(review) {
+        this.reviews.push(review);
+        console.log(review)
+        console.log(this.review)
+        }
   },
   computed: {
       title() {
