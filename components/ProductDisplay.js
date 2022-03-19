@@ -36,14 +36,23 @@ app.component('product-display', {
           class="button" 
           :class="{ disabledButton: !inStock }" 
           :disabled="!inStock" 
-          v-on:click="addToCart">
+          @click="addToCart">
           Add to Cart
+        </button>
+
+        <button 
+          class="button button-cart" 
+          :class="{ disabledButton: !inStock }" 
+          :disabled="!inStock" 
+          @click="removeItemFromCart">
+          Remove item
         </button>
       </div>
     </div>
   </div>`,
   data() {
     return {
+        addedCart: 0,
         product: 'Socks',
         brand: 'Vue Mastery',
         selectedVariant: 0,
@@ -56,10 +65,13 @@ app.component('product-display', {
   },
   methods: {
       addToCart() {
-          this.cart += 1
+          this.$emit('add-to-cart', this.variants[this.selectedVariant].id)
       },
       updateVariant(index) {
           this.selectedVariant = index
+      },
+      removeItemFromCart(){
+          this.$emit('remove-from-cart', this.variants[this.selectedVariant].id)
       }
   },
   computed: {
